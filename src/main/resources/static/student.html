@@ -1,0 +1,379 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>Student Dashboard</title>-->
+<!--  <style>-->
+<!--    body {-->
+<!--        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-->
+<!--        margin: 0;-->
+<!--        padding: 0;-->
+<!--        background-color: #f0f2f5;-->
+<!--        color: #333;-->
+<!--    }-->
+
+<!--    header {-->
+<!--        background-color: #2196F3;-->
+<!--        color: white;-->
+<!--        padding: 15px 20px;-->
+<!--        font-size: 1.5rem;-->
+<!--        text-align: center;-->
+<!--    }-->
+
+<!--    .container {-->
+<!--        padding: 20px;-->
+<!--        max-width: 800px;-->
+<!--        margin: auto;-->
+<!--    }-->
+
+<!--    h2 {-->
+<!--        color: #2196F3;-->
+<!--        border-bottom: 2px solid #ddd;-->
+<!--        padding-bottom: 5px;-->
+<!--    }-->
+
+<!--    input[type="text"] {-->
+<!--        padding: 10px;-->
+<!--        width: 60%;-->
+<!--        border: 1px solid #ccc;-->
+<!--        border-radius: 5px;-->
+<!--        font-size: 1rem;-->
+<!--    }-->
+
+<!--    button {-->
+<!--        background-color: #2196F3;-->
+<!--        color: white;-->
+<!--        padding: 10px 15px;-->
+<!--        border: none;-->
+<!--        border-radius: 5px;-->
+<!--        font-size: 1rem;-->
+<!--        cursor: pointer;-->
+<!--        margin-left: 10px;-->
+<!--    }-->
+
+<!--    button:hover {-->
+<!--        background-color: #1976D2;-->
+<!--    }-->
+
+<!--    ul {-->
+<!--        list-style: none;-->
+<!--        padding: 0;-->
+<!--    }-->
+
+<!--    li {-->
+<!--        background-color: white;-->
+<!--        padding: 15px;-->
+<!--        margin: 10px 0;-->
+<!--        border-radius: 8px;-->
+<!--        box-shadow: 0 2px 5px rgba(0,0,0,0.1);-->
+<!--    }-->
+
+<!--    .status {-->
+<!--        font-weight: bold;-->
+<!--        margin: 10px 0;-->
+<!--        font-size: 1.1rem;-->
+<!--    }-->
+
+<!--    .empty-msg {-->
+<!--        color: #888;-->
+<!--        font-style: italic;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<header>🎓 Student Dashboard</header>-->
+
+<!--<div class="container">-->
+
+<!--  <h2>Check Your Details</h2>-->
+<!--  <input type="text" id="studentId" placeholder="Enter your Student ID">-->
+<!--  <button onclick="loadStudentData()">Fetch My Orders</button>-->
+
+<!--  <div class="status" id="creditStatus"></div>-->
+
+<!--  <h3>Your Orders:</h3>-->
+<!--  <ul id="studentOrders"></ul>-->
+
+<!--  <h3>Your Pending Payments:</h3>-->
+<!--  <ul id="pendingDues"></ul>-->
+
+<!--</div>-->
+
+<!--<script>-->
+<!--  function loadStudentData() {-->
+<!--      const studentId = document.getElementById('studentId').value.trim();-->
+<!--      if (studentId === '') {-->
+<!--          alert('Please enter your Student ID.');-->
+<!--          return;-->
+<!--      }-->
+
+<!--      fetchOrders(studentId);-->
+<!--      fetchCredit(studentId);-->
+<!--      fetchPendingDues(studentId);-->
+<!--  }-->
+
+<!--  function fetchOrders(studentId) {-->
+<!--      fetch('/api/orders/student/' + studentId)-->
+<!--          .then(res => res.json())-->
+<!--          .then(data => {-->
+<!--              const ordersList = document.getElementById('studentOrders');-->
+<!--              ordersList.innerHTML = '';-->
+
+<!--              if (data.length === 0) {-->
+<!--                  ordersList.innerHTML = '<li class="empty-msg">No orders found.</li>';-->
+<!--                  return;-->
+<!--              }-->
+
+<!--              data.forEach(order => {-->
+<!--                  const li = document.createElement('li');-->
+<!--                  li.innerHTML = `<strong>${order.itemName}</strong> — ₹${order.itemPrice}<br>-->
+<!--                                  Payment: ${order.paymentType} ${order.paid ? '(Paid)' : '(On Account)'}`;-->
+<!--                  ordersList.appendChild(li);-->
+<!--              });-->
+<!--          });-->
+<!--  }-->
+
+<!--  function fetchCredit(studentId) {-->
+<!--      fetch('/api/students/' + studentId)-->
+<!--          .then(res => res.json())-->
+<!--          .then(student => {-->
+<!--              const creditStatus = document.getElementById('creditStatus');-->
+<!--              creditStatus.innerText = `Current Credit: ₹${student.credit.toFixed(2)} / ₹${student.creditThreshold.toFixed(2)}`;-->
+<!--          });-->
+<!--  }-->
+
+<!--  function fetchPendingDues(studentId) {-->
+<!--      fetch('/api/accounts/pending')  // reuse full pending dues endpoint-->
+<!--          .then(res => res.json())-->
+<!--          .then(data => {-->
+<!--              const duesList = document.getElementById('pendingDues');-->
+<!--              duesList.innerHTML = '';-->
+
+<!--              const studentDues = data.filter(entry => entry.student.sid === studentId);-->
+
+<!--              if (studentDues.length === 0) {-->
+<!--                  duesList.innerHTML = '<li class="empty-msg">No pending dues.</li>';-->
+<!--                  return;-->
+<!--              }-->
+
+<!--              studentDues.forEach(entry => {-->
+<!--                  const li = document.createElement('li');-->
+<!--                  li.innerHTML = `Item: <strong>${entry.description}</strong><br>-->
+<!--                                  Amount Due: ₹${entry.amount}`;-->
+<!--                  duesList.appendChild(li);-->
+<!--              });-->
+<!--          });-->
+<!--  }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Canteen Dashboard</title>
+  <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f6ff;
+        color: #333;
+    }
+
+    header {
+        background: linear-gradient(90deg, #0077b6, #00b4d8);
+        color: white;
+        padding: 20px;
+        font-size: 1.8rem;
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .container {
+        max-width: 850px;
+        margin: 30px auto;
+        background-color: white;
+        border-radius: 15px;
+        padding: 30px 25px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        color: #0077b6;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 5px;
+    }
+
+    input[type="text"] {
+        padding: 12px;
+        width: calc(100% - 24px);
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 1rem;
+        margin-bottom: 15px;
+        background-color: #f9f9f9;
+    }
+
+    input[type="text"]:focus {
+        border-color: #00b4d8;
+        background-color: #fff;
+        outline: none;
+    }
+
+    button {
+        background: linear-gradient(90deg, #00b4d8, #0077b6);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(90deg, #0096c7, #0077b6);
+    }
+
+    .status {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin: 20px 0;
+        color: #005b8f;
+        background-color: #e6f4ff;
+        padding: 10px 15px;
+        border-radius: 10px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        background-color: #f9fbfd;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-left: 5px solid #00b4d8;
+    }
+
+    li strong {
+        color: #0077b6;
+    }
+
+    .empty-msg {
+        color: #aaa;
+        font-style: italic;
+    }
+
+    .section {
+        margin-top: 30px;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>🍽️ Student Canteen Dashboard</header>
+
+<div class="container">
+
+  <h2>🔍 Check Your Details</h2>
+  <input type="text" id="studentId" placeholder="Enter your Student ID (e.g. S123)">
+  <button onclick="loadStudentData()">Fetch My Orders</button>
+
+  <div class="status" id="creditStatus"></div>
+
+  <div class="section">
+    <h2>📋 Your Orders</h2>
+    <ul id="studentOrders"></ul>
+  </div>
+
+  <div class="section">
+    <h2>💸 Your Pending Payments</h2>
+    <ul id="pendingDues"></ul>
+  </div>
+
+</div>
+
+<script>
+  function loadStudentData() {
+      const studentId = document.getElementById('studentId').value.trim();
+      if (studentId === '') {
+          alert('Please enter your Student ID.');
+          return;
+      }
+
+      fetchOrders(studentId);
+      fetchCredit(studentId);
+      fetchPendingDues(studentId);
+  }
+
+  function fetchOrders(studentId) {
+      fetch('/api/orders/student/' + studentId)
+          .then(res => res.json())
+          .then(data => {
+              const ordersList = document.getElementById('studentOrders');
+              ordersList.innerHTML = '';
+
+              if (data.length === 0) {
+                  ordersList.innerHTML = '<li class="empty-msg">No orders found.</li>';
+                  return;
+              }
+
+              data.forEach(order => {
+                  const li = document.createElement('li');
+                  li.innerHTML = `<strong>${order.itemName}</strong> — ₹${order.itemPrice}<br>
+                                  Payment: ${order.paymentType} ${order.paid ? '(Paid)' : '(On Account)'}`;
+                  ordersList.appendChild(li);
+              });
+          });
+  }
+
+  function fetchCredit(studentId) {
+      fetch('/api/students/' + studentId)
+          .then(res => res.json())
+          .then(student => {
+              const creditStatus = document.getElementById('creditStatus');
+              creditStatus.innerText = `Credit Used: ₹${student.credit.toFixed(2)} / ₹${student.creditThreshold.toFixed(2)}`;
+          });
+  }
+
+  function fetchPendingDues(studentId) {
+      fetch('/api/accounts/pending')
+          .then(res => res.json())
+          .then(data => {
+              const duesList = document.getElementById('pendingDues');
+              duesList.innerHTML = '';
+
+              const studentDues = data.filter(entry => entry.student.sid === studentId);
+
+              if (studentDues.length === 0) {
+                  duesList.innerHTML = '<li class="empty-msg">No pending dues.</li>';
+                  return;
+              }
+
+              studentDues.forEach(entry => {
+                  const li = document.createElement('li');
+                  li.innerHTML = `Item: <strong>${entry.description}</strong><br>
+                                  Amount Due: ₹${entry.amount}`;
+                  duesList.appendChild(li);
+              });
+          });
+  }
+</script>
+
+</body>
+</html>

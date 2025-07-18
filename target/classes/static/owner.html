@@ -1,0 +1,240 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Owner Dashboard</title>-->
+<!--    <style>-->
+<!--        body { font-family: Arial; background: #f8f9fa; margin: 20px; }-->
+<!--        h2 { color: #333; }-->
+<!--        table { border-collapse: collapse; width: 100%; }-->
+<!--        th, td { border: 1px solid #ccc; padding: 8px; }-->
+<!--        input, button { padding: 5px 10px; margin: 5px; }-->
+<!--        .menu-form { margin-top: 20px; background: #fff; padding: 15px; border: 1px solid #ccc; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Today's Orders (10:00–10:30 AM)</h2>-->
+<!--<button onclick="fetchTodayOrders()">Refresh Orders</button>-->
+<!--<table id="ordersTable">-->
+<!--    <tr>-->
+<!--        <th>Order ID</th>-->
+<!--        <th>Student ID</th>-->
+<!--        <th>Item</th>-->
+<!--        <th>Price</th>-->
+<!--        <th>Payment Type</th>-->
+<!--    </tr>-->
+<!--</table>-->
+
+<!--<div class="menu-form">-->
+<!--    <h2>Manage Menu</h2>-->
+<!--    <input id="itemName" type="text" placeholder="Item Name">-->
+<!--    <input id="itemPrice" type="number" placeholder="Price">-->
+<!--    <button onclick="addMenuItem()">Add Menu Item</button>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function fetchTodayOrders() {-->
+<!--        fetch('/api/orders/today')-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                const table = document.getElementById('ordersTable');-->
+<!--                table.innerHTML = `-->
+<!--                    <tr>-->
+<!--                        <th>Order ID</th>-->
+<!--                        <th>Student ID</th>-->
+<!--                        <th>Item</th>-->
+<!--                        <th>Price</th>-->
+<!--                        <th>Payment Type</th>-->
+<!--                    </tr>-->
+<!--                `;-->
+<!--                data.forEach(order => {-->
+<!--                    table.innerHTML += `-->
+<!--                        <tr>-->
+<!--                            <td>${order.id}</td>-->
+<!--                            <td>${order.student.id}</td>-->
+<!--                            <td>${order.itemName}</td>-->
+<!--                            <td>${order.itemPrice}</td>-->
+<!--                            <td>${order.paymentType}</td>-->
+<!--                        </tr>-->
+<!--                    `;-->
+<!--                });-->
+<!--            });-->
+<!--    }-->
+
+<!--    function addMenuItem() {-->
+<!--        const item = {-->
+<!--            itemName: document.getElementById('itemName').value,-->
+<!--            price: parseFloat(document.getElementById('itemPrice').value),-->
+<!--            available: true-->
+<!--        };-->
+
+<!--        fetch('/api/menu/add', {-->
+<!--            method: 'POST',-->
+<!--            headers: { 'Content-Type': 'application/json' },-->
+<!--            body: JSON.stringify(item)-->
+<!--        })-->
+<!--        .then(response => {-->
+<!--            if (response.ok) {-->
+<!--                alert('Menu Item Added');-->
+<!--            } else {-->
+<!--                alert('Failed to add menu item');-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Owner Dashboard - Chandrettante Canteen</title>
+    <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: #f4f7f8;
+          margin: 0;
+          padding: 0;
+        }
+
+        header {
+          background-color: #4a90e2;
+          color: white;
+          padding: 20px;
+          text-align: center;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+          margin: 0;
+        }
+
+        main {
+          max-width: 900px;
+          margin: 40px auto;
+          padding: 20px;
+          background: white;
+          border-radius: 10px;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section {
+          margin-bottom: 40px;
+        }
+
+        .section h2 {
+          color: #333;
+          margin-bottom: 10px;
+          border-left: 5px solid #4a90e2;
+          padding-left: 10px;
+        }
+
+        button {
+          background-color: #4a90e2;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-bottom: 10px;
+          transition: background 0.3s ease;
+        }
+
+        button:hover {
+          background-color: #357ab8;
+        }
+
+        ul {
+          list-style: none;
+          padding-left: 0;
+        }
+
+        li {
+          padding: 10px;
+          background: #f0f0f0;
+          margin-bottom: 8px;
+          border-radius: 6px;
+          box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .total {
+          font-weight: bold;
+          font-size: 18px;
+          color: #d9534f;
+          margin-top: 10px;
+        }
+
+        footer {
+          text-align: center;
+          font-size: 14px;
+          padding: 10px;
+          color: #888;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Chandrettante Canteen - Owner Dashboard</h1>
+</header>
+
+<main>
+    <div class="section">
+        <h2>📦 Today's Orders</h2>
+        <button onclick="fetchTodayOrders()">Load Orders</button>
+        <ul id="orderList"></ul>
+    </div>
+
+    <div class="section">
+        <h2>💳 Payment on Account</h2>
+        <button onclick="fetchPendingAccounts()">Load Pending Dues</button>
+        <ul id="accountList"></ul>
+        <div id="totalDue" class="total"></div>
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 Chandrettante Canteen | Developed with ❤️
+</footer>
+
+<script>
+    function fetchTodayOrders() {
+      fetch('/api/orders/today')
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById('orderList');
+          list.innerHTML = '';
+          data.forEach(order => {
+            const li = document.createElement('li');
+            li.innerText = `Student: ${order.student.sid} | ${order.itemName} | ₹${order.itemPrice} | ${order.paymentType.toUpperCase()}${order.paid ? " ✅" : " ❌"}`;
+            list.appendChild(li);
+          });
+        })
+        .catch(() => alert('Error loading orders'));
+    }
+
+    function fetchPendingAccounts() {
+      fetch('/api/accounts/pending')
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById('accountList');
+          const totalElem = document.getElementById('totalDue');
+          list.innerHTML = '';
+          let total = 0;
+          data.forEach(entry => {
+            const li = document.createElement('li');
+            li.innerText = `Student: ${entry.student.sid} | Item: ${entry.description} | ₹${entry.amount}`;
+            list.appendChild(li);
+            total += entry.amount;
+          });
+          totalElem.innerText = `Total Due: ₹${total.toFixed(2)}`;
+        })
+        .catch(() => alert('Error loading account dues'));
+    }
+</script>
+
+</body>
+</html>

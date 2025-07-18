@@ -1,0 +1,431 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--  <title>Student | Place Order</title>-->
+<!--  <style>-->
+<!--    body {-->
+<!--        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-->
+<!--        background-color: #f5f7fa;-->
+<!--        margin: 0;-->
+<!--        padding: 0;-->
+<!--        color: #333;-->
+<!--    }-->
+
+<!--    .container {-->
+<!--        max-width: 600px;-->
+<!--        margin: 30px auto;-->
+<!--        background-color: white;-->
+<!--        border-radius: 12px;-->
+<!--        padding: 30px 25px;-->
+<!--        box-shadow: 0 4px 12px rgba(0,0,0,0.1);-->
+<!--    }-->
+
+<!--    h2 {-->
+<!--        text-align: center;-->
+<!--        color: #4CAF50;-->
+<!--        margin-bottom: 20px;-->
+<!--    }-->
+
+<!--    label {-->
+<!--        display: block;-->
+<!--        font-weight: bold;-->
+<!--        margin: 10px 0 5px;-->
+<!--    }-->
+
+<!--    input[type="text"], select {-->
+<!--        width: calc(100% - 20px);-->
+<!--        padding: 10px;-->
+<!--        font-size: 1rem;-->
+<!--        border: 1px solid #ccc;-->
+<!--        border-radius: 8px;-->
+<!--        margin-bottom: 15px;-->
+<!--        display: block;-->
+<!--        background-color: #fafafa;-->
+<!--        transition: border-color 0.3s ease;-->
+<!--    }-->
+
+<!--    input[type="text"]:focus, select:focus {-->
+<!--        border-color: #4CAF50;-->
+<!--        outline: none;-->
+<!--        background-color: #fff;-->
+<!--    }-->
+
+<!--    button {-->
+<!--        width: 100%;-->
+<!--        background-color: #4CAF50;-->
+<!--        color: white;-->
+<!--        font-size: 1.1rem;-->
+<!--        padding: 12px 0;-->
+<!--        border: none;-->
+<!--        border-radius: 8px;-->
+<!--        cursor: pointer;-->
+<!--        margin-top: 10px;-->
+<!--        transition: background-color 0.3s ease;-->
+<!--    }-->
+
+<!--    button:hover {-->
+<!--        background-color: #45a049;-->
+<!--    }-->
+
+<!--    #result {-->
+<!--        text-align: center;-->
+<!--        font-weight: bold;-->
+<!--        margin-top: 20px;-->
+<!--        font-size: 1.1rem;-->
+<!--        color: #444;-->
+<!--    }-->
+
+<!--    .menu-section {-->
+<!--        background-color: #f9f9f9;-->
+<!--        padding: 15px;-->
+<!--        border-radius: 8px;-->
+<!--        margin-bottom: 20px;-->
+<!--    }-->
+
+<!--    .menu-item {-->
+<!--        background-color: white;-->
+<!--        border: 1px solid #ddd;-->
+<!--        padding: 10px;-->
+<!--        margin-bottom: 10px;-->
+<!--        border-radius: 6px;-->
+<!--        display: flex;-->
+<!--        justify-content: space-between;-->
+<!--    }-->
+
+<!--    .menu-item-name {-->
+<!--        font-weight: bold;-->
+<!--    }-->
+
+<!--    .menu-item-price {-->
+<!--        color: #4CAF50;-->
+<!--        font-weight: bold;-->
+<!--    }-->
+
+<!--    @media(max-width: 600px) {-->
+<!--        .container {-->
+<!--            margin: 20px;-->
+<!--            padding: 20px;-->
+<!--        }-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--  <h2>🍽️ Place Your Order</h2>-->
+
+<!--  <div class="menu-section">-->
+<!--    <h3>📋 Menu</h3>-->
+<!--    <div id="menuList">-->
+<!--      &lt;!&ndash; Menu items will be displayed here &ndash;&gt;-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <label>Student ID:</label>-->
+<!--  <input type="text" id="studentId" placeholder="Enter your Student ID">-->
+
+<!--  <label>Select Menu Item:</label>-->
+<!--  <select id="menuDropdown">-->
+<!--    <option value="">Select an item...</option>-->
+<!--  </select>-->
+
+<!--  <label>Payment Method:</label>-->
+<!--  <select id="paymentType">-->
+<!--    <option value="pay_now">Pay Now</option>-->
+<!--    <option value="on_account">Pay On Account</option>-->
+<!--  </select>-->
+
+<!--  <button onclick="placeOrder()">Place Order</button>-->
+
+<!--  <p id="result"></p>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--  const menuItems = [-->
+<!--    { id: "M01", name: "Meals", price: 40 },-->
+<!--    { id: "M02", name: "Chai", price: 10 },-->
+<!--    { id: "M03", name: "Snacks", price: 20 }-->
+<!--  ];-->
+
+<!--  function displayMenu() {-->
+<!--      const menuList = document.getElementById('menuList');-->
+<!--      const dropdown = document.getElementById('menuDropdown');-->
+<!--      menuList.innerHTML = '';-->
+<!--      dropdown.innerHTML = '<option value="">Select an item...</option>';-->
+
+<!--      menuItems.forEach(item => {-->
+<!--          const menuItemDiv = document.createElement('div');-->
+<!--          menuItemDiv.className = 'menu-item';-->
+<!--          menuItemDiv.innerHTML = `-->
+<!--              <span class="menu-item-name">${item.name}</span>-->
+<!--              <span class="menu-item-price">₹${item.price}</span>-->
+<!--          `;-->
+<!--          menuList.appendChild(menuItemDiv);-->
+
+<!--          const option = document.createElement('option');-->
+<!--          option.value = item.id;-->
+<!--          option.textContent = `${item.name} — ₹${item.price}`;-->
+<!--          dropdown.appendChild(option);-->
+<!--      });-->
+<!--  }-->
+
+<!--  function placeOrder() {-->
+<!--      const studentId = document.getElementById('studentId').value.trim();-->
+<!--      const itemId = document.getElementById('menuDropdown').value;-->
+<!--      const paymentType = document.getElementById('paymentType').value;-->
+
+<!--      if (studentId === '' || itemId === '') {-->
+<!--          alert('Please enter your Student ID and select a menu item.');-->
+<!--          return;-->
+<!--      }-->
+
+<!--      const data = {-->
+<!--          studentId: studentId,-->
+<!--          itemId: itemId,-->
+<!--          paymentType: paymentType-->
+<!--      };-->
+
+<!--      fetch('/api/orders/place', {-->
+<!--          method: 'POST',-->
+<!--          headers: { 'Content-Type': 'application/json' },-->
+<!--          body: JSON.stringify(data)-->
+<!--      })-->
+<!--      .then(response => response.text())-->
+<!--      .then(text => {-->
+<!--          document.getElementById('result').innerText = text;-->
+<!--      })-->
+<!--      .catch(err => {-->
+<!--          document.getElementById('result').innerText = 'Order failed.';-->
+<!--      });-->
+<!--  }-->
+
+<!--  window.onload = displayMenu;-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Canteen | Place Order</title>
+  <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fffdf7;
+        margin: 0;
+        padding: 0;
+        color: #444;
+    }
+
+    header {
+        background: linear-gradient(90deg, #ffb347, #ffcc33);
+        color: white;
+        font-size: 1.5rem;
+        text-align: center;
+        padding: 20px;
+        letter-spacing: 1px;
+        font-weight: bold;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: white;
+        border-radius: 16px;
+        padding: 30px 25px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #ff9800;
+        margin-bottom: 25px;
+        font-size: 1.7rem;
+    }
+
+    label {
+        font-weight: bold;
+        margin: 10px 0 5px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    input[type="text"], select {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        background-color: #fffaf0;
+        transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus, select:focus {
+        border-color: #ffb347;
+        background-color: #fff;
+    }
+
+    button {
+        width: 100%;
+        background: linear-gradient(90deg, #ff9800, #ffc107);
+        color: white;
+        font-size: 1.2rem;
+        padding: 14px 0;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background: linear-gradient(90deg, #f57c00, #ffa000);
+    }
+
+    #result {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 20px;
+        font-size: 1.1rem;
+        color: #555;
+    }
+
+    .menu-section {
+        background: #fff8e1;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    }
+
+    .menu-item {
+        background: white;
+        border: 1px solid #eee;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+    }
+
+    .menu-item-name {
+        font-weight: bold;
+        color: #e65100;
+    }
+
+    .menu-item-price {
+        color: #4CAF50;
+        font-weight: bold;
+    }
+
+    @media(max-width: 600px) {
+        .container {
+            margin: 20px;
+            padding: 20px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+<header>🍽️ Chandrettante Canteen</header>
+
+<div class="container">
+  <h2>Place Your Order</h2>
+
+  <div class="menu-section">
+    <h3>📋 Menu</h3>
+    <div id="menuList">
+      <!-- Menu items will load here -->
+    </div>
+  </div>
+
+  <label>Student ID:</label>
+  <input type="text" id="studentId" placeholder="e.g., S01">
+
+  <label>Select Menu Item:</label>
+  <select id="menuDropdown">
+    <option value="">-- Select your favorite --</option>
+  </select>
+
+  <label>Payment Method:</label>
+  <select id="paymentType">
+    <option value="pay_now">Pay Now</option>
+    <option value="on_account">Pay On Account</option>
+  </select>
+
+  <button onclick="placeOrder()">Place Order</button>
+  <button onclick="window.location.href='/student.html'">📊 View My Orders & Dues</button>
+  <p id="result"></p>
+</div>
+
+<script>
+  const menuItems = [
+    { id: "M01", name: "Meals", price: 40 },
+    { id: "M02", name: "Chai", price: 10 },
+    { id: "M03", name: "Snacks", price: 20 }
+  ];
+
+  function displayMenu() {
+      const menuList = document.getElementById('menuList');
+      const dropdown = document.getElementById('menuDropdown');
+      menuList.innerHTML = '';
+      dropdown.innerHTML = '<option value="">-- Select your favorite --</option>';
+
+      menuItems.forEach(item => {
+          const menuItemDiv = document.createElement('div');
+          menuItemDiv.className = 'menu-item';
+          menuItemDiv.innerHTML = `
+              <span class="menu-item-name">${item.name}</span>
+              <span class="menu-item-price">₹${item.price}</span>
+          `;
+          menuList.appendChild(menuItemDiv);
+
+          const option = document.createElement('option');
+          option.value = item.id;
+          option.textContent = `${item.name} — ₹${item.price}`;
+          dropdown.appendChild(option);
+      });
+  }
+
+  function placeOrder() {
+      const studentId = document.getElementById('studentId').value.trim();
+      const itemId = document.getElementById('menuDropdown').value;
+      const paymentType = document.getElementById('paymentType').value;
+
+      if (studentId === '' || itemId === '') {
+          alert('Please enter your Student ID and select a menu item.');
+          return;
+      }
+
+      const data = {
+          studentId: studentId,
+          itemId: itemId,
+          paymentType: paymentType
+      };
+
+      fetch('/api/orders/place', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(text => {
+          document.getElementById('result').innerText = text;
+      })
+      .catch(err => {
+          document.getElementById('result').innerText = 'Order failed.';
+      });
+  }
+
+  window.onload = displayMenu;
+</script>
+
+</body>
+</html>
